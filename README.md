@@ -34,7 +34,7 @@ Image undistortion is implemented in [ImageUndistorter](./advancedlanelines/came
 
 #### Distorted image correction samples
 
-![calibration1.jpg](./camera_cal/calibration1.jpg)
-![calibration1_undistort.jpg](./output_images/calibration1_undistort.jpg)
-![straight_lines1.jpg](./test_images/straight_lines1.jpg)
-![straight_lines1_undistort.jpg](./output_images/straight_lines1_undistort.jpg)
+![calibration1.jpg](./camera_cal/calibration1.jpg =100x100)
+![calibration1_undistort.jpg](./output_images/calibration1_undistort.jpg =100x100)
+![straight_lines1.jpg](./test_images/straight_lines1.jpg =100x100)
+![straight_lines1_undistort.jpg](./output_images/straight_lines1_undistort.jpg =100x100)
