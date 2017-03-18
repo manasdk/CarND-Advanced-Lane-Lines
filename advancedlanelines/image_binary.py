@@ -14,7 +14,9 @@ class ImageBinarizer:
         This method binarizes with combined s channel and gradient thresholds
         """
         s_binary = self.s_channel_binary(img)
+        # self._save_scaled_image(s_binary, "s_binary.jpg")
         sxbinary = self.gradient_threshold_binary(img)
+        # self._save_scaled_image(sxbinary, "sxbinary.jpg")
         combined_binary = np.zeros_like(sxbinary)
         combined_binary[(s_binary == 1) | (sxbinary == 1)] = 1
         # scale up so that the binary image draws properly else 0 and 1 are represented by black.
@@ -24,6 +26,8 @@ class ImageBinarizer:
         return combined_binary
 
     def s_channel_binary(self, img):
+        """
+        """
         # Convert to HLS color space and separate the S channel
         hls = cv2.cvtColor(img, cv2.COLOR_RGB2HLS)
         s_channel = hls[:,:,2]
@@ -33,6 +37,8 @@ class ImageBinarizer:
         return s_binary
 
     def gradient_threshold_binary(self, img):
+        """
+        """
         gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
         sobelx = cv2.Sobel(gray, cv2.CV_64F, 1, 0)
         abs_sobelx = np.absolute(sobelx)
@@ -42,9 +48,22 @@ class ImageBinarizer:
         return sxbinary
 
     def binarize_given_path(self, img_path):
+        """
+        Returns a binarized version of supplied image.
+        """
         return self.binarize(img=cv2.imread(img_path))
 
     def binarize_given_path_and_save(self, img_path, out_path):
+        """
+        Returns a binarized version of supplied image and also saves to out_path
+        """
         binary = self.binarize(img=cv2.imread(img_path))
         cv2.imwrite(out_path, binary)
         return binary
+
+    def _save_scaled_image(self, binary, out_path):
+        """
+        Used only to write interim data for debugging and generating report data.
+        """
+        scaled_binary = 255 * np.dstack((binary, binary, binary)).astype('uint8')
+        cv2.imwrite(out_path, scaled_binary)

@@ -38,3 +38,25 @@ Distorted | Undistorted
 ----------|--------------
 ![calibration1.jpg](./camera_cal/calibration1.jpg) | ![calibration1_undistort.jpg](./output_images/calibration1_undistort.jpg)
 ![straight_lines1.jpg](./test_images/straight_lines1.jpg) | ![straight_lines1_undistort.jpg](./output_images/straight_lines1_undistort.jpg)
+
+
+### Thresholded binary image
+
+Image binarizing is implemented in [ImageBinarizer](./advancedlanelines/image_binary.py). This process combines binary images
+produced by 2 separate techniques.
+
+#### s_channel_binary
+Perform and RGB to HLS color space transform and select only highlight in the s-channel of the transformed image.
+
+![straight_lines1_undistort_s_binary.jpg](./output_images/straight_lines1_undistort_s_binary.jpg)
+
+#### gradient_threshold_binary
+This method uses the sobel operator to detect edges of lanes which is an improvement over canny edge detection
+since that detects all edges.
+
+![straight_lines1_undistort_sxbinary.jpg](./output_images/straight_lines1_undistort_sxbinary.jpg)
+
+#### combined
+Combination of the 2 techniques gives us a clearer detection of lane lines in an image as show in the sample below.
+
+![straight_lines1_undistort_binary.jpg](./output_images/straight_lines1_undistort_binary.jpg)
