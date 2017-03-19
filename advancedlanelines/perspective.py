@@ -40,43 +40,27 @@ class PerspectiveTransformer:
         # picking roughly a trapezoid that would contain a lane
         img_x = img_size[0]
         img_y = img_size[1]
-        # some trial and error
-        # src = np.float32([
-        #     [img_x * 0.2, img_y],
-        #     [int(img_x * 0.466), img_y * 0.625],
-        #     [int(img_x * 0.535), img_y * 0.625],
-        #     [img_x * 0.85, img_y],
-        # ])
-        # for 1280 x 720 image src would be
-        # [[  256.   720.]
-        #  [  596.   450.]
-        #  [  684.   450.]
-        #  [ 1088.   720.]]
-        # for 1280 x 720 image dst is desired to be
-        # [[  100.   620.]
-        # [  100.   100.]
-        # [ 1180.   100.]
-        # [ 1180.   620.]]
-        # x = 100
-        # dst = np.float32([
-        #     [x, img_size[1]-x],
-        #     [x, x],
-        #     [img_size[0]-x, x],
-        #     [img_size[0]-x, img_size[1]-x]
-        # ])
 
-        # picking roughly a trapezoid that would contain a lane. the coefficients are achieved
-        # with some trial and error
+        # [1]
+        # with some trial and error picking roughly a trapezoid that would contain a lane
         src = np.float32([
             [img_x * 0.2, img_y],
-            [int(img_x * 0.379), img_y * 0.75],
-            [int(img_x * 0.61), img_y * 0.75],
+            [int(img_x * 0.468), img_y * 0.625],
+            [int(img_x * 0.534), img_y * 0.625],
             [img_x * 0.85, img_y],
         ])
+        # for 1280 x 720 image src would be
+        # [[  256.   720.]
+        #  [  599.   450.]
+        #  [  683.   450.]
+        #  [ 1088.   720.]]
+        new_top_left = np.array([src[0][0], 0])
+        new_top_right = np.array([src[3][0], 0])
+        x = 50
         dst = np.float32([
-            [src[1][0], src[0][1]],
-            src[1],
-            src[2],
-            [src[2][0], src[3][1]]
+            [src[0][0] + x, src[0][1]],
+            [src[0][0] + x, 0],
+            [src[3][0] - x, 0],
+            [src[3][0] - x, src[3][1]]
         ])
         return src, dst

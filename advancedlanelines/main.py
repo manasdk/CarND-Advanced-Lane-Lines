@@ -1,6 +1,7 @@
 from camera_utils import CameraCalibrator, ImageUndistorter
 from image_binary import ImageBinarizer
 from perspective import PerspectiveTransformer
+from lane import LaneExtractor
 
 
 def calibrate_camera_and_undistort():
@@ -52,8 +53,16 @@ def perspective_transform():
     )
 
 
+def extract_lane():
+    extractor = LaneExtractor()
+    extractor.extract_lane_from_scratch_and_save(
+        binary_warped_path='../output_images/straight_lines1_undistort_binary_warped.jpg',
+        out_path='../output_images/straight_lines1_undistort_binary_warped_lanes.jpg'
+    )
+
+
 if __name__ == '__main__':
     # calibrate_camera_and_undistort()
     # binarize()
     perspective_transform()
-
+    extract_lane()

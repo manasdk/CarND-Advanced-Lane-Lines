@@ -71,3 +71,14 @@ Undistorted | Warped
 ------------|--------
 ![straight_lines1_undistort.jpg](./output_images/straight_lines1_undistort.jpg) | ![straight_lines1_undistort_warped.jpg](./output_images/straight_lines1_undistort_warped.jpg)
 ![straight_lines1_undistort_binary.jpg](./output_images/straight_lines1_undistort_binary.jpg) | ![straight_lines1_undistort_binary_warped.jpg](./output_images/straight_lines1_undistort_binary_warped.jpg)
+
+### Lane extraction
+Lane extraction is based on the implementation provided in lecture slides. [LaneExtractor](./advancedlines/lane.py) and
+uses [Line](./advanced/line.py) to store interim state. [LaneExtractor](./advancedlines/lane.py) has 2 methods `extract_lane_from_scratch` and
+`extract_lanes_based_on_previous` that are the actual lane extraction method based on determining historgam to determine the start of lines
+and then using a window method to move to the top of the frame to detect the entire line.
+
+Without | With
+--------|------
+![straight_lines1_undistort_binary_warped.jpg](./output_images/straight_lines1_undistort_binary_warped.jpg) | ![straight_lines1_undistort_binary_warped_lanes.jpg](./output_images/straight_lines1_undistort_binary_warped_lanes.jpg)
+
