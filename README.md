@@ -60,3 +60,14 @@ since that detects all edges.
 Combination of the 2 techniques gives us a clearer detection of lane lines in an image as show in the sample below.
 
 ![straight_lines1_undistort_binary.jpg](./output_images/straight_lines1_undistort_binary.jpg)
+
+### Perspective transform
+Perspective transform is implemented in [PerspectiveTransformer](./advancedlines/perspective.py) and uses
+`opencv.getPerspectiveTransform` to compute the transform matrix. `opencv.warpPerspective` is used to
+warp the perspective of an undistored image. The `dst` and `src` points detrmination was based on a bit of trial
+and error to come up with a warped imaged with a good bit of information.
+
+Undistorted | Warped
+------------|--------
+![straight_lines1_undistort.jpg](./output_images/straight_lines1_undistort.jpg) | ![straight_lines1_undistort_warped.jpg](./output_images/straight_lines1_undistort_warped.jpg)
+![straight_lines1_undistort_binary.jpg](./output_images/straight_lines1_undistort_binary.jpg) | ![straight_lines1_undistort_binary_warped.jpg](./output_images/straight_lines1_undistort_binary_warped.jpg)

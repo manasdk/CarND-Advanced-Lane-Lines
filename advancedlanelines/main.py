@@ -1,5 +1,6 @@
 from camera_utils import CameraCalibrator, ImageUndistorter
 from image_binary import ImageBinarizer
+from perspective import PerspectiveTransformer
 
 
 def calibrate_camera_and_undistort():
@@ -40,7 +41,19 @@ def binarize():
     )
 
 
+def perspective_transform():
+    perspective_transformer = PerspectiveTransformer.warp_perspective_and_save(
+        undist_img_path='../output_images/straight_lines1_undistort.jpg',
+        out_path='../output_images/straight_lines1_undistort_warped.jpg'
+    )
+    perspective_transformer = PerspectiveTransformer.warp_perspective_and_save(
+        undist_img_path='../output_images/straight_lines1_undistort_binary.jpg',
+        out_path='../output_images/straight_lines1_undistort_binary_warped.jpg'
+    )
+
+
 if __name__ == '__main__':
     # calibrate_camera_and_undistort()
-    binarize()
+    # binarize()
+    perspective_transform()
 
