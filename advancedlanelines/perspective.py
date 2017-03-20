@@ -4,12 +4,10 @@ import numpy as np
 
 class PerspectiveTransformer:
     def __init__(self, img_size):
-        print(img_size)
         self.src_points, self.dest_points = self._get_src_dst(img_size)
-        print(self.src_points)
-        print(self.dest_points)
         self.img_size = img_size
         self.M = cv2.getPerspectiveTransform(self.src_points, self.dest_points)
+        self.M_inverse = cv2.getPerspectiveTransform(self.dest_points, self.src_points)
 
     @classmethod
     def warp_perspective_and_save(cls, undist_img_path, out_path):
@@ -29,6 +27,12 @@ class PerspectiveTransformer:
         warp the perspective based on previously computed perspective transformer.
         """
         return cv2.warpPerspective(undist_img, self.M, self.img_size)
+
+    def warp_perspective_inverse(self, undist_img):
+        """
+        unwarp the perspective based on previously computed perspective transformer.
+        """
+        return cv2.warpPerspective(undist_img, self.M_inverse, self.img_size)
 
     def _get_src_dst(self, img_size):
         """

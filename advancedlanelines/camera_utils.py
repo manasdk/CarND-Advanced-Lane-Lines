@@ -57,13 +57,14 @@ class ImageUndistorter:
         self.dist = dist
 
     def undistort(self, img):
-        return cv2.undistort(img, self.mtx, self.dist, None, self.mtx)
+        out_img = cv2.undistort(img, self.mtx, self.dist, None, self.mtx)
+        return out_img
 
     def undistort_given_path(self, img_path):
         img = cv2.imread(img_path)
-        return self.undistort(img=cv2.imread(img_path))
+        return self.undistort(img=img)
 
     def undistort_given_path_and_save(self, img_path, out_path):
-        undistorted_img = self.undistort(img_path=img_path)
+        undistorted_img = self.undistort_given_path(img_path=img_path)
         cv2.imwrite(out_path, undistorted_img)
         return undistorted_img

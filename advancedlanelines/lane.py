@@ -14,15 +14,22 @@ class LaneExtractor():
         binary_warped = cv2.cvtColor(binary_warped, cv2.COLOR_RGB2GRAY)
         out_img, _, _, _, _ = self.extract_lane_from_scratch(binary_warped)
         cv2.imwrite(out_path, out_img)
+        # self.extract_lane(binary_warped)
+        # print self.get_current_curvature()
 
     def extract_lane(self, binary_warped):
         if self.left_line.detected and self.right_line.detected:
-            left_fitx, left_fit, right_fitx, right_fit = self.extract_lanes_based_on_previous(binary_warped)
+            left_fitx, left_fit, right_fitx, right_fit = self.extract_lanes_based_on_previous(
+                binary_warped,
+                self.left_line.current_fit[self.left_line.last_idx],
+                self.right_line.current_fit[self.right_line.last_idx]
+            )
         else:
-            _, left_fitx, left_fit, right_fitx, right_fit = self.extract_lane_from_scratch(binary_warped, [], [])
+            _, left_fitx, left_fit, right_fitx, right_fit = self.extract_lane_from_scratch(binary_warped)
         # update the left and right lines
-        self.left_line.update(left_fit, left_fitx)
-        self.right_line.update(right_fit, right_fitx)
+        self.left_line.update(fit=left_fit, fitx=left_fitx)
+        self.right_line.update(fit=right_fit, fitx=right_fitx)
+        return left_fitx, left_fit, right_fitx, right_fit
 
     def extract_lane_from_scratch(self, binary_warped):
         """
@@ -31,7 +38,6 @@ class LaneExtractor():
         # Assuming you have created a warped binary image called "binary_warped"
         # Take a histogram of the bottom half of the image
         histogram = np.sum(binary_warped[binary_warped.shape[0]/2:,:], axis=0)
-        print histogram
         # Create an output image to draw on and  visualize the result
         out_img = np.dstack((binary_warped, binary_warped, binary_warped))*255
         # Find the peak of the left and right halves of the histogram
@@ -136,3 +142,28 @@ class LaneExtractor():
         right_fitx = right_fit[0]*ploty**2 + right_fit[1]*ploty + right_fit[2]
 
         return left_fitx, left_fit, right_fitx, right_fit
+
+    def get_current_curvature(self):
+        # Define conversions in x and y from pixels space to meters
+        ym_per_pix = 30/720 # meters per pixel in y dimension
+        xm_per_pix = 3.7/700 # meters per pixel in x dimension
+
+        # Recalculate road curvature in X-Y space
+        ploty = np.linspace(0, 719, num=720)
+        y_eval = np.max(ploty)
+
+        # experiment, mostly failing
+        # leftx = self.left_line.get_average_x()
+        # rightx = self.right_line.get_average_x()
+        leftx = self.left_line.recent_xfitted[self.left_line.last_idx]
+        rightx = self.right_line.recent_xfitted[self.right_line.last_idx]
+
+        # Fit new polynomials to x,y in world space
+        left_fit_cr = np.polyfit(ploty * ym_per_pix, leftx * xm_per_pix, 2)
+        right_fit_cr = np.polyfit(ploty * ym_per_pix, rightx * xm_per_pix, 2)
+
+        left_curverad = ((1 + (2*left_fit_cr[0]*y_eval*ym_per_pix + left_fit_cr[1])**2)**1.5) / np.absolute(2*left_fit_cr[0])
+        right_curverad = ((1 + (2*right_fit_cr[0]*y_eval*ym_per_pix + right_fit_cr[1])**2)**1.5) / np.absolute(2*right_fit_cr[0])
+
+        # road curvature is average of left and right
+        return (left_curverad + right_curverad) / 2

@@ -23,13 +23,14 @@ class Line():
         self.allx = None
         #y values for detected line pixels
         self.ally = None
-
-        self.buffer_idx = 0
+        # save index of last added fit
+        self.last_idx = -1
 
     def update(self, fit, fitx):
-        if not fit or not fitx:
-            return
-        self.current_fit[self.buffer_idx] = fit
-        self.recent_xfitted[self.buffer_idx] = fitx
+        self.current_fit.append(fit)
+        self.recent_xfitted.append(fitx)
         self.detected = True
-        self.buffer_idx += 1
+        self.last_idx += 1
+
+    def get_average_x(self):
+        return np.sum(self.recent_xfitted, axis=0) / (self.last_idx + 1)
