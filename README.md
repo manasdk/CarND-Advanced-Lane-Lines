@@ -82,8 +82,8 @@ Without | With
 --------|------
 ![straight_lines1_undistort_binary_warped.jpg](./output_images/straight_lines1_undistort_binary_warped.jpg) | ![straight_lines1_undistort_binary_warped_lanes.jpg](./output_images/straight_lines1_undistort_binary_warped_lanes.jpg)
 
-Note : Although [LaneExtractor](./advancedlines/lane.py) has implementation of `get_current_curvature` to return curavture of the
-last processed image its implementation is not working as expected.
+[LaneExtractor](./advancedlines/lane.py) has implementation of `get_curvature` to return curavture given the x distance of the lane
+left and right lines.
 
 ### Pipeline
 A pipeline to process a single image is coded up in [Pipeline](./advancedlanelines/pipeline.py). The `process_single_image`
@@ -96,8 +96,11 @@ input | output
 
 Each image in the video to be processed will be processed by the `process_single_image` method and transformed to the output image.
 
-The final video output of the project is as follows -
+The final video outputs of the project is as follows -
 
-input video | output video
-------------|-------------
-[input](./project_video.mp4) | [output](./project_video_out.mp4)
+input video | output video | annotated video
+------------|--------------|-----------------
+[input](./project_video.mp4) | [output](./project_video_out.mp4) | [annotated output](./project_video_annotated_out.mp4)
+
+
+

@@ -76,5 +76,5 @@ if __name__ == '__main__':
     pipeline = Pipeline()
     pipeline.process_video(
         input_video_path='../project_video.mp4',
-        output_video_path='../project_video_out.mp4'
+        output_video_path='../project_video_annotated_out.mp4'
     )

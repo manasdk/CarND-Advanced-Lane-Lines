@@ -8,14 +8,15 @@ class LaneExtractor():
     def __init__(self):
         self.left_line = Line()
         self.right_line = Line()
+        # Define conversions in x and y from pixels space to meters
+        self.ym_per_pix = 30.0/720 # meters per pixel in y dimension
+        self.xm_per_pix = 3.7/700 # meters per pixel in x dimension
 
     def extract_lane_from_scratch_and_save(self, binary_warped_path, out_path):
         binary_warped = cv2.imread(binary_warped_path)
         binary_warped = cv2.cvtColor(binary_warped, cv2.COLOR_RGB2GRAY)
         out_img, _, _, _, _ = self.extract_lane_from_scratch(binary_warped)
         cv2.imwrite(out_path, out_img)
-        # self.extract_lane(binary_warped)
-        # print self.get_current_curvature()
 
     def extract_lane(self, binary_warped):
         if self.left_line.detected and self.right_line.detected:
@@ -143,20 +144,16 @@ class LaneExtractor():
 
         return left_fitx, left_fit, right_fitx, right_fit
 
-    def get_current_curvature(self):
-        # Define conversions in x and y from pixels space to meters
-        ym_per_pix = 30/720 # meters per pixel in y dimension
-        xm_per_pix = 3.7/700 # meters per pixel in x dimension
+    def get_curvature(self, leftx, rightx):
+        """
+        Returns the current curvature
+        """
+        ym_per_pix = self.ym_per_pix
+        xm_per_pix = self.xm_per_pix
 
         # Recalculate road curvature in X-Y space
         ploty = np.linspace(0, 719, num=720)
         y_eval = np.max(ploty)
-
-        # experiment, mostly failing
-        # leftx = self.left_line.get_average_x()
-        # rightx = self.right_line.get_average_x()
-        leftx = self.left_line.recent_xfitted[self.left_line.last_idx]
-        rightx = self.right_line.recent_xfitted[self.right_line.last_idx]
 
         # Fit new polynomials to x,y in world space
         left_fit_cr = np.polyfit(ploty * ym_per_pix, leftx * xm_per_pix, 2)
@@ -166,4 +163,4 @@ class LaneExtractor():
         right_curverad = ((1 + (2*right_fit_cr[0]*y_eval*ym_per_pix + right_fit_cr[1])**2)**1.5) / np.absolute(2*right_fit_cr[0])
 
         # road curvature is average of left and right
-        return (left_curverad + right_curverad) / 2
+        return (left_curverad + right_curverad) / 2, left_curverad, right_curverad

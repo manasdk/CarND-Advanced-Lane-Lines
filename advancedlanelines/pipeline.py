@@ -46,9 +46,14 @@ class Pipeline():
         binary_warped_img = self.perspective_transformer.warp_perspective(binary_img)
         # 4. extract lanes, image needs to be gray scale for lane extraction
         binary_warped_img = cv2.cvtColor(binary_warped_img, cv2.COLOR_RGB2GRAY)
-        left_fitx, _, right_fitx, _ = self.lane_extractor.extract_lane(binary_warped_img)
+        left_fitx, _, right_fitx, _ = self.lane_extractor.extract_lane(
+            binary_warped=binary_warped_img
+        )
         # 5. fill lane poly
         filled_binary_warped_img = self._fill_lane_poly(binary_warped_img, left_fitx, right_fitx)
+        # 6. put curvature info on original image
+        self._put_info(img=img, leftx=left_fitx, rightx=right_fitx)
+        # 7. superimpose filled poly on original image
         return self._superimpose_filled_on_original(
             org_img=img, filled_binary_warped_img=filled_binary_warped_img
         )
@@ -74,6 +79,11 @@ class Pipeline():
 
         return color_warp
 
+    def _put_info(self, img, leftx, rightx):
+        avg, left, right = self.lane_extractor.get_curvature(leftx, rightx)
+        # Assuming that car is in the middle so use average value as car distance
+        info = 'Left: {:.3f}m   Right: {:.3f}m   Car distance: {:.3f}m'.format(left, right, avg)
+        cv2.putText(img, info, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 1)
 
     def _superimpose_filled_on_original(self, org_img, filled_binary_warped_img):
         # unawarp filled_binary_warped_img
