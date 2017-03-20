@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import os.path
 import pickle
+from moviepy.editor import VideoFileClip
 
 from camera_utils import CameraCalibrator, ImageUndistorter
 from image_binary import ImageBinarizer
@@ -28,6 +29,11 @@ class Pipeline():
         )
         self.perspective_transformer = None
         self.lane_extractor = LaneExtractor()
+
+    def process_video(self, input_video_path, output_video_path):
+        input_clip = VideoFileClip(input_video_path)
+        output_clip = input_clip.fl_image(self.process_single_image)
+        output_clip.write_videofile(output_video_path, audio=False)
 
     def process_single_image(self, img):
         # 1. undistort the image
@@ -87,7 +93,11 @@ class Pipeline():
 
 
 if __name__ == '__main__':
+    """
+    Test method for process_single_image of Pipeline
+    """
     pipeline = Pipeline()
     img = cv2.imread('../test_images/straight_lines1.jpg')
     out_img = pipeline.process_single_image(img)
     cv2.imwrite('../output_images/straight_lines1_lane_found.jpg', out_img)
+    out_img = pipeline.process_single_image(img)

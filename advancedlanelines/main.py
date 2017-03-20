@@ -1,7 +1,14 @@
 from camera_utils import CameraCalibrator, ImageUndistorter
 from image_binary import ImageBinarizer
-from perspective import PerspectiveTransformer
 from lane import LaneExtractor
+from perspective import PerspectiveTransformer
+from pipeline import Pipeline
+
+
+##
+# Note: all the methods here were used to test parts of the pipeline individually and
+# generate data for the report.
+##
 
 
 def calibrate_camera_and_undistort():
@@ -64,5 +71,10 @@ def extract_lane():
 if __name__ == '__main__':
     # calibrate_camera_and_undistort()
     # binarize()
-    perspective_transform()
-    extract_lane()
+    # perspective_transform()
+    # extract_lane()
+    pipeline = Pipeline()
+    pipeline.process_video(
+        input_video_path='../project_video.mp4',
+        output_video_path='../project_video_out.mp4'
+    )

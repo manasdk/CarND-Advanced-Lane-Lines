@@ -95,3 +95,9 @@ input | output
 ![straight_lines1.jpg](./test_images/straight_lines1.jpg) | ![straight_lines1_lane_found.jpg](./output_images/straight_lines1_lane_found.jpg)
 
 Each image in the video to be processed will be processed by the `process_single_image` method and transformed to the output image.
+
+The final video output of the project is as follows -
+
+input video | output video
+------------|-------------
+![input](../project_video.mp4) | ![output](../project_video_out.mp4)
