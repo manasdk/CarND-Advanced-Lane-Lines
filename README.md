@@ -82,3 +82,16 @@ Without | With
 --------|------
 ![straight_lines1_undistort_binary_warped.jpg](./output_images/straight_lines1_undistort_binary_warped.jpg) | ![straight_lines1_undistort_binary_warped_lanes.jpg](./output_images/straight_lines1_undistort_binary_warped_lanes.jpg)
 
+Note : Although [LaneExtractor](./advancedlines/lane.py) has implementation of `get_current_curvature` to return curavture of the
+last processed image its implementation is not working as expected.
+
+### Pipeline
+A pipeline to process a single image is coded up in [Pipeline](./advancedlanelines/pipeline.py). The `process_single_image`
+method is the implementation to process a single image, detect a lane and super impose a filled polygon on the returned
+image.
+
+input | output
+------|-------
+![straight_lines1.jpg](./test_images/straight_lines1.jpg) | ![straight_lines1_lane_found.jpg](./output_images/straight_lines1_lane_found.jpg)
+
+Each image in the video to be processed will be processed by the `process_single_image` method and transformed to the output image.
