@@ -100,4 +100,4 @@ The final video output of the project is as follows -
 
 input video | output video
 ------------|-------------
-![input](../project_video.mp4) | ![output](../project_video_out.mp4)
+[input](./project_video.mp4) | [output](./project_video_out.mp4)
